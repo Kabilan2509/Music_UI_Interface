@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music UI - Like Spotify</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.5;
+            height: 100vh;
+        }
+
+        .header {
+            background-color: #000000;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #000000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar a {
+            color: #b3b3b3;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #282828;
+            color: #ffffff;
+        }
+
+        .sidebar a.active {
+            background-color: #1db954;
+            color: #ffffff;
+        }
+        .content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: linear-gradient(to bottom, #1db954, #121212);
+        }
+        .now-playing {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease;
+        }
+        .now-playing:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .now-playing h3 {
+            margin-bottom: 15px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .album-art {
+            width: 200px;
+            height: 200px;
+            background-color: #333;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .album-art:hover {
+            transform: scale(1.05);
+        }
+
+        .album-art img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: inherit;
+        }
+
+        .track-info {
+            margin-bottom: 20px;
+        }
+
+        .track-info h4 {
+            font-weight: 700;
+            margin-bottom: 5px;
+            letter-spacing: 0.3px;
+        }
+
+        .track-info p {
+            font-weight: 300;
+            color: #b3b3b3;
+            letter-spacing: 0.2px;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.1);
+            color: #1db954;
+        }
+
+        .play-btn {
+            background-color: #1db954;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px #1db954;
+        }
+
+        .playlists {
+            margin-top: 20px;
+        }
+
+        .playlists h3 {
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+        }
+
+        .playlist h4 {
+            font-weight: 500;
+            margin-bottom: 5px;
+            letter-spacing: 0.3px;
+        }
+
+        .playlist p {
+            color: #b3b3b3;
+            font-size: 14px;
+            font-weight: 300;
+            letter-spacing: 0.2px;
+        }
+
+        .playlist {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            cursor: pointer;
+        }
+
+        .playlist:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .playlist img {
+            width: 50px;
+            height: 50px;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+
+        .playlist h4 {
+            margin-bottom: 5px;
+        }
+
+        .playlist p {
+            color: #b3b3b3;
+            font-size: 14px;
+        }
+
+        .footer {
+            background-color: #181818;
+            padding: 15px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            margin: 0 20px;
+            height: 6px;
+            background-color: #535353;
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+            transition: height 0.2s ease;
+        }
+
+        .progress-bar:hover {
+            height: 8px;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, #1db954, #1ed760);
+            border-radius: inherit;
+            transition: width 0.2s ease;
+        }
+
+        .time {
+            color: #ffffff;
+            font-size: 14px;
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .main {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Music UI</h1>
+        <div>Profile</div>
+    </header>
+
+    <div class="main">
+        <aside class="sidebar">
+            <h2>Menu</h2>
+            <ul>
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#">Search</a></li>
+                <li><a href="#">Your Library</a></li>
+                <li><a href="#">Create Playlist</a></li>
+                <li><a href="#">Liked Songs</a></li>
+            </ul>
+            <h2>Playlists</h2>
+            <ul>
+                <li><a href="#">My Playlist #1</a></li>
+                <li><a href="#">Chill Vibes</a></li>
+                <li><a href="#">Workout Mix</a></li>
+            </ul>
+        </aside>
+
+        <main class="content">
+            <section class="now-playing">
+                <h3>Now Playing</h3>
+                <div class="album-art">
+                    <img src="images.jpg" alt="Album Art">
+                </div>
+                <div class="track-info">
+                    <h4>Thalapathy Kacheri</h4>
+                    <p>Anirudh Ravichandran,Thapalathy Vijay</p>
+                </div>
+                <div class="controls">
+                    <button class="control-btn">⏮</button>
+                    <button class="control-btn play-btn" id="play-btn">▶</button>
+                    <button class="control-btn">⏭</button>
+                </div>
+                <audio id="audio-player" style="display: none;">
+                    <source src="Thalapathy Kacheri.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </section>
+            <section class="playlists">
+                <h3>Recommended Playlists</h3>
+                <div class="playlist">
+                    <img src="download.jpg" alt="Playlist Cover">
+                    <div>
+                        <h4>Today's Top Hits</h4>
+                        <p>The most played songs right now</p>
+                    </div>
+                </div>
+                <div class="playlist">
+                    <img src="download (1).jpg" alt="Playlist Cover">
+                    <div>
+                        <h4>Discover Weekly</h4>
+                        <p>Your weekly mixtape of fresh music</p>
+                    </div>
+                </div>
+                <div class="playlist">
+                    <img src="download (3).jpg" alt="Playlist Cover">
+                    <div>
+                        <h4>Release Radar</h4>
+                        <p>Catch all the latest music from artists you follow</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-top">
+            <div class="track-info">
+                <h4>Thapalathy Kacheri</h4>
+                <p>Anirudh Ravichandran,Thapalathy Vijay</p>
+            </div>
+            <div class="progress-bar" id="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <div class="controls">
+                <button class="control-btn">⏮</button>
+                <button class="control-btn play-btn" id="footer-play-btn">▶</button>
+                <button class="control-btn">⏭</button>
+            </div>
+        </div>
+        <div class="time">
+            <span id="current-time">0:00</span> / <span id="duration">0:00</span>
+        </div>
+    </footer>
+    <script>
+        const playBtn = document.getElementById('play-btn');
+        const footerPlayBtn = document.getElementById('footer-play-btn');
+        const audio = document.getElementById('audio-player');
+        const progressBar = document.getElementById('progress-bar');
+        const progress = document.getElementById('progress');
+        const currentTimeEl = document.getElementById('current-time');
+        const durationEl = document.getElementById('duration');
+
+        function togglePlay() {
+            if (audio.paused) {
+                audio.play();
+                playBtn.textContent = '⏸';
+                footerPlayBtn.textContent = '⏸';
+            } else {
+                audio.pause();
+                playBtn.textContent = '▶';
+                footerPlayBtn.textContent = '▶';
+            }
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return mins + ':' + (secs < 10 ? '0' : '') + secs;
+        }
+
+        audio.addEventListener('loadedmetadata', () => {
+            durationEl.textContent = formatTime(audio.duration);
+        });
+
+        audio.addEventListener('timeupdate', () => {
+            const percent = (audio.currentTime / audio.duration) * 100;
+            progress.style.width = percent + '%';
+            currentTimeEl.textContent = formatTime(audio.currentTime);
+        });
+
+        progressBar.addEventListener('click', (e) => {
+            const rect = progressBar.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const width = rect.width;
+            const percent = clickX / width;
+            audio.currentTime = percent * audio.duration;
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                togglePlay();
+            }
+        });
+
+        playBtn.addEventListener('click', togglePlay);
+        footerPlayBtn.addEventListener('click', togglePlay);
+    </script>
+</body>
+</html>
